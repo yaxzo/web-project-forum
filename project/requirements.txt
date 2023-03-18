@@ -1,3 +1,7 @@
+# скачать все модули, нужные для стабильной работы
+# прописать в cmd:
+# pip3 install -r requirements.txt
+
 flask==2.2.3
 WTForms==3.0.1
 flask-wtf==1.1.1

@@ -15,6 +15,14 @@
 
 [PROJECT DESCRIPTON]
 
+[Хабр](https://habr.com/ru/all/)
+
+[Журнал "Код"](https://thecode.media)
+
+[Reddit](https://www.reddit.com)
+
+
+
 # Авторы проекта
 
 [AUTHORS OF THE PROJECT]

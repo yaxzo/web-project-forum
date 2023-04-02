@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from data import db_session
 from data.user import User
@@ -23,6 +23,13 @@ db_session.global_init("db/forum.db")
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route("/registration", methods=["GET", "POST"])
@@ -73,16 +80,26 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
 
         if check_password_hash(user.hashed_password, form.password.data):
-            login_user(user)
+            login_user(user, remember=form.remember_me.data)
             return redirect("/")
-    return render_template('login.html', title="вход", form=form)
+        return render_template("login.html",
+                               title="",
+                               message="",
+                               form=form)
+    return render_template("login.html", title="вход", form=form)
 
 
-@app.route("/logout")
+@app.route("/redirect_account")
 @login_required
-def logout():
-    logout_user()
-    return redirect("/")
+def redirect_account():
+    user_id = current_user.id
+    return redirect(f"/account/{user_id}")
+
+
+@app.route("/account/<int:user_id>", methods=["GET"])
+@login_required
+def account(user_id):
+    return f"{user_id}"
 
 
 @app.route("/")
@@ -91,7 +108,7 @@ def home():
 
 
 def main():
-    app.run(host="127.0.0.1", port=5050, debug=True)
+    app.run(host="127.0.0.1", port=5050)
 
 
 if __name__ == '__main__':

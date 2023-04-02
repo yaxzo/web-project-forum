@@ -9,10 +9,10 @@
 </head>
 <body>
     {% block header %}
-        <div class="container text-center">
+        <div class="container">
             <div class="row">
-                <div class="col">
-                    <h3>название</h3>
+                <div class="col justify-content-start">
+                    <h3><strong>ProgerVibe</strong></h3>
                 </div>
                 <div class="col">
                     {% if current_user.is_authenticated %}
@@ -49,8 +49,32 @@
     {% endblock %} <br><br>
 
     {% block content %}
-        <div class="container text-center">
-            fsdfsdfsdf
+        <div class="container-xxl">
+            info
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5><strong>Дружелюбное коммьюнити</strong></h5>
+                </div>
+                <div class="col">
+                    <h5><strong>Активное сообщество</strong></h5>
+                </div>
+                <div class="col">
+                    <h5><strong>Свободное обсуждение</strong></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <small>Все пользователи доброжелательны друг к другу</small>
+                </div>
+                <div class="col">
+                    <small>Пользователи регулярно публикуют контент</small>
+                </div>
+                <div class="col">
+                    <small>Обсуждайте с пользователями любые темы, связанные с айти</small>
+                </div>
+            </div>
         </div>
     {% endblock %}
 

@@ -9,6 +9,9 @@ from forms.login import LoginForm
 
 from werkzeug.security import check_password_hash
 
+'''
+    ОБЪЯВЛЕНИЕ БАЗОВЫХ ПЕРЕМЕННЫХ И ПОДКЛЮЧЕНИЕ БИБЛИОТЕК
+'''
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "project_secret_key"
@@ -16,23 +19,24 @@ app.config["SECRET_KEY"] = "project_secret_key"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-db_session.global_init("db/forum.db")
+db_session.global_init("db/forum.db")  # подключение к бд
 
 
+# сохранения пользователя в "сессии"
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
 
-@app.route("/logout")
+@app.route("/logout")  # обработчик выхода пользователя из аккаунта
 @login_required
 def logout():
     logout_user()
     return redirect("/")
 
 
-@app.route("/registration", methods=["GET", "POST"])
+@app.route("/registration", methods=["GET", "POST"])  # обработчик для регистрации пользователя
 def registration():
     form = RegistrationForm()
 
@@ -71,7 +75,7 @@ def registration():
                            form=form)
 
 
-@app.route("/login", methods=["GET", "POST"])  # функция для входа в аккаунт пользователя
+@app.route("/login", methods=["GET", "POST"])  # обработчик для входа в аккаунт пользователя
 def login():
     form = LoginForm()
 
@@ -81,30 +85,33 @@ def login():
 
         if check_password_hash(user.hashed_password, form.password.data):
             login_user(user, remember=form.remember_me.data)
+
             return redirect("/")
         return render_template("login.html",
                                title="",
                                message="",
                                form=form)
-    return render_template("login.html", title="вход", form=form)
+    return render_template("login.html",
+                           title="вход",
+                           form=form)
 
 
-@app.route("/redirect_account")
+@app.route("/redirect_account")  # обработчик получает айди активного пользователя
 @login_required
 def redirect_account():
     user_id = current_user.id
-    return redirect(f"/account/{user_id}")
+    return redirect(f"/account/{user_id}")  # и переадрессовыввает его в свой аккаунт
 
 
-@app.route("/account/<int:user_id>", methods=["GET"])
+@app.route("/account/<int:user_id>", methods=["GET"])  # обработчик аккаунта пользователя
 @login_required
 def account(user_id):
     return f"{user_id}"
 
 
-@app.route("/")
+@app.route("/")  # обработчик домашней страницы
 def home():
-    return render_template("base.html", title="home page")
+    return render_template("base.html", title="Главная")
 
 
 def main():

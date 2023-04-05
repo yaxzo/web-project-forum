@@ -1,11 +1,12 @@
 from flask import Flask, render_template, redirect
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager, login_user, logout_user, login_required
 
 from data import db_session
 from data.user import User
 
-from forms.registration import RegistrationForm
-from forms.login import LoginForm
+from forms.registration_form import RegistrationForm
+from forms.login_form import LoginForm
+from forms.trad_form import CreateTradForm
 
 from werkzeug.security import check_password_hash
 
@@ -34,6 +35,11 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
+
+
+'''
+        ВИДИМАЯ НА САЙТЕ ЧАСТЬ
+'''
 
 
 @app.route("/registration", methods=["GET", "POST"])  # обработчик для регистрации пользователя
@@ -96,17 +102,21 @@ def login():
                            form=form)
 
 
-@app.route("/redirect_account")  # обработчик получает айди активного пользователя
-@login_required
-def redirect_account():
-    user_id = current_user.id
-    return redirect(f"/account/{user_id}")  # и переадрессовыввает его в свой аккаунт
-
-
 @app.route("/account/<int:user_id>", methods=["GET"])  # обработчик аккаунта пользователя
 @login_required
 def account(user_id):
-    return f"{user_id}"
+    return render_template("account.html",
+                           title="Аккаунт",
+                           id=user_id)
+
+
+@app.route("/create_trad", methods=["GET", "POST"])
+@login_required
+def create_trad():  # обработчик для создания трэда (обсуждения)
+    form = CreateTradForm()
+
+    if form.validate_on_submit():
+        ...  # допишу 
 
 
 @app.route("/")  # обработчик домашней страницы

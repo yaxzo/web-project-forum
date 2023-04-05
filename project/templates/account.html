@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col align-items-center">
+                    <img src="../static/photo.jpg" class="rounded-circle" alt="..." style="width: 100px; height: 100px;"><br>
+                    <strong>Юзернейм: </strong> {{ current_user.username }}<br>
+                    <strong>Почта: </strong> {{ current_user.email }}
+            </div>
+            <div class="col">
+            </div>
+            <div class="col justify-content-end">
+                <a type="button" class="btn btn-outline-primary" href="/crate_article" style="margin-right: 15px;">Создать статью</a>
+                <a type="button" class="btn btn-outline-primary" href="/create_trad">Создать обсуждение</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

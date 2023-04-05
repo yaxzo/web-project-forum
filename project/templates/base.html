@@ -9,7 +9,7 @@
 </head>
 <body>
     {% block header %}
-        <div class="container" style="height: 100px">
+        <div class="container" style="height: 50px">
             <div class="row">
                 <div class="col justify-content-start">
                     <h3><strong>ProgerVibe</strong></h3>
@@ -27,7 +27,7 @@
                                 <a class="nav-link active" aria-current="page" href="#">Обсуждения</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/redirect_account">Аккаунт</a>
+                                <a class="nav-link active" aria-current="page" href="/account/{{current_user.id}}">Аккаунт</a>
                             </li>
                         </ul>
                     {% else %}
@@ -49,57 +49,61 @@
     {% endblock %} <br><br>
 
     {% block content %}
-        <div class="container align-items-center" style="height: 300px">
-            <div class="container text-center">
-                <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col">
-                        <h4>Присоединятесь&nbsp;к&nbsp;нам&nbsp;и&nbsp;общайтесь с другими программистами!</h4>
-                    </div>
-                    <div class="col">
+        {% if current_user.is_anonymous %}
+            <div class="container align-items-center" style="height: 300px">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                            <h4>Присоединятесь&nbsp;к&nbsp;нам&nbsp;и&nbsp;общайтесь с другими программистами!</h4>
+                        </div>
+                        <div class="col">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="container align-items-center" style="height: 270px">
-            <div class="container text-center">
-                <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col">
-                        <a class="btn btn-outline-dark" href="/registration" role="button">Присоединиться</a>
-                    </div>
-                    <div class="col">
+            <div class="container align-items-center" style="height: 270px">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col">
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-outline-dark" href="/registration" role="button">Присоединиться</a>
+                        </div>
+                        <div class="col">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <div class="row d-flex justify-content-around">
-                <div class="col">
-                    <h5><strong>Дружелюбное коммьюнити</strong></h5>
+            <div class="container">
+                <div class="row d-flex justify-content-around">
+                    <div class="col">
+                        <h5><strong>Дружелюбное коммьюнити</strong></h5>
+                    </div>
+                    <div class="col">
+                        <h5><strong>Активное сообщество</strong></h5>
+                    </div>
+                    <div class="col">
+                        <h5><strong>Свободное обсуждение</strong></h5>
+                    </div>
                 </div>
-                <div class="col">
-                    <h5><strong>Активное сообщество</strong></h5>
-                </div>
-                <div class="col">
-                    <h5><strong>Свободное обсуждение</strong></h5>
+                <div class="row d-flex justify-content-around">
+                    <div class="col">
+                        <small>Все пользователи доброжелательны друг к другу</small>
+                    </div>
+                    <div class="col">
+                        <small>Пользователи регулярно публикуют контент</small>
+                    </div>
+                    <div class="col">
+                        <small>Обсуждайте с пользователями любые темы, связанные с айти</small>
+                    </div>
                 </div>
             </div>
-            <div class="row d-flex justify-content-around">
-                <div class="col">
-                    <small>Все пользователи доброжелательны друг к другу</small>
-                </div>
-                <div class="col">
-                    <small>Пользователи регулярно публикуют контент</small>
-                </div>
-                <div class="col">
-                    <small>Обсуждайте с пользователями любые темы, связанные с айти</small>
-                </div>
-            </div>
-        </div>
+        {% else %}
+            <p>U auth</p>
+        {% endif %}
     {% endblock %}
 
     {% block footer %}

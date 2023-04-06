@@ -36,7 +36,7 @@ pip3 install -r requirements.txt
 после чего, пропишите команду 
 
 ```
-python3 main.py 
+flask run
 ```
 
 и уже после переходите на сайт, который указан в консоли

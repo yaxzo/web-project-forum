@@ -1,5 +1,7 @@
-from flask import Flask, render_template, redirect
-from flask_login import LoginManager, login_user, logout_user, login_required
+import os
+
+from flask import Flask, render_template, redirect, request
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from data import db_session
 from data.user import User
@@ -7,8 +9,12 @@ from data.user import User
 from forms.registration_form import RegistrationForm
 from forms.login_form import LoginForm
 from forms.trad_form import CreateTradForm
+from forms.change_info_form import ChangeInfoForm
 
 from werkzeug.security import check_password_hash
+
+import uuid as uuid
+
 
 '''
     ОБЪЯВЛЕНИЕ БАЗОВЫХ ПЕРЕМЕННЫХ И ПОДКЛЮЧЕНИЕ БИБЛИОТЕК
@@ -16,6 +22,9 @@ from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "project_secret_key"
+app.config["UPLOAD_FOLDER"] = "static/profile pictures"
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -35,6 +44,11 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
+
+
+def allowed_file(filename):  # функция проверки расширения файла
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 '''
@@ -116,7 +130,54 @@ def create_trad():  # обработчик для создания трэда (�
     form = CreateTradForm()
 
     if form.validate_on_submit():
-        ...  # допишу 
+        if form.title.data and form.preview.data and form.content.data:
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+            user.title = form.title.data
+            user.preview = form.preview.data
+            user.content = form.content.data
+            user.is_private = form.is_private.data
+            return redirect(f"/account/{current_user.id}")
+        return render_template("crate_trad.html",
+                               form=form,
+                               message="Одно из полей осталось пустым")
+    return render_template("create_trad.html",
+                           form=form)
+
+
+@app.route("/create_article", methods=["GET", "POST"])
+def create_article():  # обработчик дл создания статьи
+    ...
+
+
+@app.route("/change_info", methods=["GET", "POST"])
+def change_info():
+    form = ChangeInfoForm()
+
+    if form.validate_on_submit():
+        if check_password_hash(current_user.hashed_password, form.password.data):
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+
+            if form.username.data:
+                user.username = form.username.data
+            if form.email.data:
+                user.email = form.email.data
+
+            photo = request.files["photo"]
+            if form.photo.data and allowed_file(photo.filename):
+                pic_name = f"{str(uuid.uuid1())}.webp"
+                user.profile_photo = pic_name
+
+                saver = request.files["photo"]
+                saver.save(os.path.join(app.config["UPLOAD_FOLDER"], pic_name))
+
+            db_sess.commit()
+            return redirect(f"/account/{current_user.id}")
+        return render_template("change_info.html",
+                               form=form,
+                               message="Введён некорректный пароль")
+    return render_template("change_info.html", form=form)
 
 
 @app.route("/")  # обработчик домашней страницы

@@ -23,6 +23,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                               index=True,
                               unique=True,
                               nullable=False)
+    profile_photo= sqlalchemy.Column(sqlalchemy.String,
+                                     default="default.webp",
+                                     nullable=False)
     hashed_password = sqlalchemy.Column(sqlalchemy.String,
                                         nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,

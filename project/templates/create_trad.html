@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="h-100 d-flex justify-content-center align-items-center">
+    <h2>Создание статьи</h2>
+</div>
+<div class="h-100 d-flex justify-content-center align-items-center">
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(class="form-control") }}<br>
+            {% for error in form.title.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.preview.label }}<br>
+            {{ form.preview(class="form-control") }}<br>
+            {% for error in form.preview.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.content.label }}<br>
+            {{ form.content(class="form-control", type="textarea") }}<br>
+            {% for error in form.content.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>{{ form.is_private(class="form-check-input", type="checkbox") }} {{ form.is_private.label }}</p>
+        <p>{{ form.submit(type="submit", class="btn btn-outline-primary") }}</p>
+        {% if message %}
+            <p class="alert alert-danger" role="alert">
+                {{message}}
+            </p>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

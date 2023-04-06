@@ -4,9 +4,10 @@
     <div class="container">
         <div class="row">
             <div class="col align-items-center">
-                    <img src="../static/photo.jpg" class="rounded-circle" alt="..." style="width: 100px; height: 100px;"><br>
+                    <img src="../static/profile pictures/{{ current_user.profile_photo }}" class="rounded-circle" alt="..." style="width: 125px; height: 125px;"><br>
                     <strong>Юзернейм: </strong> {{ current_user.username }}<br>
-                    <strong>Почта: </strong> {{ current_user.email }}
+                    <strong>Почта: </strong> {{ current_user.email }}<br><br>
+                    <a type="button" class="btn btn-outline-primary" href="/change_info">Изменить информацию об аккаунте</a>
             </div>
             <div class="col">
             </div>

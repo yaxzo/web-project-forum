@@ -165,12 +165,17 @@ def change_info():
                 user.email = form.email.data
 
             photo = request.files["photo"]
-            if form.photo.data and allowed_file(photo.filename):
-                pic_name = f"{str(uuid.uuid1())}.webp"
-                user.profile_photo = pic_name
+            if form.photo.data
+                if allowed_file(photo.filename):
+                    pic_name = f"{str(uuid.uuid1())}.webp"
+                    user.profile_photo = pic_name
 
-                saver = request.files["photo"]
-                saver.save(os.path.join(app.config["UPLOAD_FOLDER"], pic_name))
+                    saver = request.files["photo"]
+                    saver.save(os.path.join(app.config["UPLOAD_FOLDER"], pic_name))
+                else:
+                    return render_template("change_info.html",
+                               form=form,
+                               message="Некорректный файл")
 
             db_sess.commit()
             return redirect(f"/account/{current_user.id}")

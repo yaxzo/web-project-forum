@@ -133,10 +133,14 @@ def create_trad():  # обработчик для создания трэда (�
         if form.title.data and form.preview.data and form.content.data:
             db_sess = db_session.create_session()
             user = db_sess.query(User).filter(User.id == current_user.id).first()
+
             user.title = form.title.data
             user.preview = form.preview.data
             user.content = form.content.data
             user.is_private = form.is_private.data
+
+            db_sess.commit()
+
             return redirect(f"/account/{current_user.id}")
         return render_template("crate_trad.html",
                                form=form,
@@ -165,7 +169,7 @@ def change_info():
                 user.email = form.email.data
 
             photo = request.files["photo"]
-            if form.photo.data
+            if form.photo.data:
                 if allowed_file(photo.filename):
                     pic_name = f"{str(uuid.uuid1())}.webp"
                     user.profile_photo = pic_name
@@ -174,8 +178,8 @@ def change_info():
                     saver.save(os.path.join(app.config["UPLOAD_FOLDER"], pic_name))
                 else:
                     return render_template("change_info.html",
-                               form=form,
-                               message="Некорректный файл")
+                                           form=form,
+                                           message="Неккоректный файл")
 
             db_sess.commit()
             return redirect(f"/account/{current_user.id}")

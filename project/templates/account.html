@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" style="margin-bottom: 30px;">
         <div class="row">
             <div class="col align-items-center">
                     <img src="../static/profile pictures/{{ current_user.profile_photo }}" class="rounded-circle" alt="..." style="width: 125px; height: 125px;"><br>
@@ -15,6 +15,29 @@
                 <a type="button" class="btn btn-outline-primary" href="/crate_article" style="margin-right: 15px;">Создать статью</a>
                 <a type="button" class="btn btn-outline-primary" href="/create_trad">Создать обсуждение</a>
             </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="align-items-center"> Ваши обсуждения </h1>
+        <div class="row">
+            {% if items %}
+                {% for item in trads %}
+                    <div class="col" style="margin-bottom: 20px;">
+                        <div class="card" style="width: 15rem;">
+                            <img src="../static/trads pictures/{{ item.trad_photo }}" class="card-img-top" alt="..." style="width: 18rem; height: 15rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text">{{ item.preview }}</p>
+                                <p><a class="card-text" href="/user/{{ item.user.id }}">{{ item.user.username }}</a></p>
+                                <a href="/trad/{{ item.id }}" class="btn btn-primary">Перейти к треду</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h6><strong> Вы ещё не создавали обсуждения </strong></h6>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

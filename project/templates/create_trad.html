@@ -5,7 +5,7 @@
     <h2>Создание статьи</h2>
 </div>
 <div class="h-100 d-flex justify-content-center align-items-center">
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
             {{ form.title.label }}<br>
@@ -29,6 +29,15 @@
             {{ form.content.label }}<br>
             {{ form.content(class="form-control", type="textarea") }}<br>
             {% for error in form.content.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.photo.label }}<br>
+            {{ form.photo(class="form-control", type="file") }}<br>
+            {% for error in form.photo.errors %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
                 </p>

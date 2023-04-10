@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container" style="margin-bottom: 30px;">
+        <div class="row">
+            <div class="col align-items-center">
+                    <img src="../static/profile pictures/{{ user.profile_photo }}" class="rounded-circle" alt="..." style="width: 125px; height: 125px;"><br>
+                    <strong>Юзернейм: </strong> {{ user.username }}<br>
+                    <strong>Почта: </strong> {{ user.email }}<br><br>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="align-items-center"> Обсуждения {{ user.username }}</h1>
+        <div class="row">
+            {% for item in trads %}
+                <div class="col" style="margin-bottom: 20px;">
+                    <div class="card" style="width: 15rem;">
+                        <img src="../static/trads pictures/{{ item.trad_photo }}" class="card-img-top" alt="..." style="width: 15rem; height: 15rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text">{{ item.preview }}</p>
+                            <p><a class="card-text" href="/user/{{ item.user.id }}">{{ item.user.username }}</a></p>
+                            <a href="/trad/{{ item.id }}" class="btn btn-primary">Перейти к треду</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

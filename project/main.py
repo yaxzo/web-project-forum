@@ -5,6 +5,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 
 from data import db_session
 from data.user import User
+from data.trad import Trad
 
 from forms.registration_form import RegistrationForm
 from forms.login_form import LoginForm
@@ -22,7 +23,7 @@ import uuid as uuid
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "project_secret_key"
-app.config["UPLOAD_FOLDER"] = "static/profile pictures"
+app.config["UPLOAD_FOLDER"] = ["static/profile pictures", "static/trads pictures", "static/article pictures"]
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
@@ -116,12 +117,39 @@ def login():
                            form=form)
 
 
-@app.route("/account/<int:user_id>", methods=["GET"])  # обработчик аккаунта пользователя
+@app.route("/account/<int:user_id>", methods=["GET"])  # обработчик аккаунта пользователя В сессии
 @login_required
 def account(user_id):
+    db_sess = db_session.create_session()
+    trads = db_sess.query(Trad).filter(Trad.author_id == current_user.id)
+
     return render_template("account.html",
                            title="Аккаунт",
-                           id=user_id)
+                           trads=trads)
+
+
+@app.route("/user/<int:user_id>", methods=["GET"])  # обработчик аккаунта пользователя НЕ в сессии
+def user_account(user_id):
+    if current_user.id == user_id:
+        return redirect(f"/account/{current_user.id}")
+
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    trads = db_sess.query(Trad).filter(Trad.author_id == user_id)
+
+    return render_template("another_user.html",
+                           title=f"Аккаунт {user.username}",
+                           user=user,
+                           trads=trads)
+
+
+@app.route("/trad/<int:trad_id>", methods=["GET"])
+def look_trad(trad_id):
+    db_sess = db_session.create_session()
+    trad = db_sess.query(Trad).filter(Trad.id == trad_id).first()
+
+    return render_template("look_trad.html",
+                           trad=trad)
 
 
 @app.route("/create_trad", methods=["GET", "POST"])
@@ -131,13 +159,36 @@ def create_trad():  # обработчик для создания трэда (�
 
     if form.validate_on_submit():
         if form.title.data and form.preview.data and form.content.data:
+            if len(form.preview.data) > 70:
+                return render_template("create_trad.html",
+                                       form=form,
+                                       message="Слишком длинное превью")
+
             db_sess = db_session.create_session()
             user = db_sess.query(User).filter(User.id == current_user.id).first()
 
-            user.title = form.title.data
-            user.preview = form.preview.data
-            user.content = form.content.data
-            user.is_private = form.is_private.data
+            trad = Trad()
+            trad.title = form.title.data
+            trad.preview = form.preview.data
+            trad.content = form.content.data
+            trad.is_private = form.is_private.data
+
+            photo = request.files["photo"]
+            if form.photo.data:
+                if allowed_file(photo.filename):
+                    pic_name = f"{str(uuid.uuid1())}.webp"
+                    trad.trad_photo = pic_name
+
+                    saver = request.files["photo"]
+                    saver.save(os.path.join(app.config["UPLOAD_FOLDER"][1], pic_name))
+                else:
+                    return render_template("create_trad.html",
+                                           form=form,
+                                           message="Неккоректный файл")
+
+            user.trads.append(trad)
+
+            trads = db_sess.query(Trad).filter(Trad.is_private != True)
 
             db_sess.commit()
 
@@ -175,7 +226,7 @@ def change_info():
                     user.profile_photo = pic_name
 
                     saver = request.files["photo"]
-                    saver.save(os.path.join(app.config["UPLOAD_FOLDER"], pic_name))
+                    saver.save(os.path.join(app.config["UPLOAD_FOLDER"][0], pic_name))
                 else:
                     return render_template("change_info.html",
                                            form=form,
@@ -191,7 +242,11 @@ def change_info():
 
 @app.route("/")  # обработчик домашней страницы
 def home():
-    return render_template("base.html", title="Главная")
+    db_sess = db_session.create_session()
+    trads = db_sess.query(Trad).filter(Trad.is_private != True)
+    return render_template("base.html",
+                           title="Главная",
+                           trads=trads)
 
 
 def main():

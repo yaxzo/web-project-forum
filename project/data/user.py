@@ -2,6 +2,7 @@ import datetime
 from flask_login import UserMixin
 
 import sqlalchemy
+from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 
 from data.db_session import SqlAlchemyBase
@@ -23,13 +24,14 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                               index=True,
                               unique=True,
                               nullable=False)
-    profile_photo= sqlalchemy.Column(sqlalchemy.String,
-                                     default="default.webp",
-                                     nullable=False)
+    profile_photo = sqlalchemy.Column(sqlalchemy.String,
+                                      default="default.webp",
+                                      nullable=False)
     hashed_password = sqlalchemy.Column(sqlalchemy.String,
                                         nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.date.today())
+    trads = orm.relationship("Trad", back_populates="user")
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

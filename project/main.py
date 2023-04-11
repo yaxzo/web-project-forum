@@ -22,10 +22,11 @@ import uuid as uuid
 '''
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "project_secret_key"
-app.config["UPLOAD_FOLDER"] = ["static/profile pictures", "static/trads pictures", "static/article pictures"]
+app.config["SECRET_KEY"] = "project_secret_key" 
+app.config["UPLOAD_FOLDER"] = ["static/profile pictures", "static/trads pictures", "static/article pictures"]  # папки для загрузки файлов
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True  # "красивый вывод" jsonify 
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}  # разрешённые расширения 
 
 login_manager = LoginManager()
 login_manager.init_app(app)

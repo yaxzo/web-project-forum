@@ -6,11 +6,13 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data import db_session
 from data.user import User
 from data.trad import Trad
+from data.trad_comments import TradComment
 
 from forms.registration_form import RegistrationForm
 from forms.login_form import LoginForm
 from forms.trad_form import CreateTradForm
 from forms.change_info_form import ChangeInfoForm
+from forms.comment_form import CommentForm
 
 from werkzeug.security import check_password_hash
 
@@ -22,11 +24,10 @@ import uuid as uuid
 '''
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "project_secret_key" 
-app.config["UPLOAD_FOLDER"] = ["static/profile pictures", "static/trads pictures", "static/article pictures"]  # папки для загрузки файлов
-app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True  # "красивый вывод" jsonify 
+app.config["SECRET_KEY"] = "project_secret_key"
+app.config["UPLOAD_FOLDER"] = ["static/profile pictures", "static/trads pictures", "static/article pictures"]
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}  # разрешённые расширения 
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -144,13 +145,33 @@ def user_account(user_id):
                            trads=trads)
 
 
-@app.route("/trad/<int:trad_id>", methods=["GET"])
+@app.route("/trad/<int:trad_id>", methods=["GET", "POST"])
 def look_trad(trad_id):
     db_sess = db_session.create_session()
     trad = db_sess.query(Trad).filter(Trad.id == trad_id).first()
 
+    comments = db_sess.query(TradComment).filter(TradComment.trad_id == trad_id)
+
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+
+        comment = TradComment()
+        comment.trad_id = trad_id
+        comment.author_id = current_user.id
+        comment.content = form.comment_text.data
+
+        db_sess.add(comment)
+
+        db_sess.commit()
+        return redirect(f"/trad/{trad_id}")
+
     return render_template("look_trad.html",
-                           trad=trad)
+                           title=trad.title,
+                           trad=trad,
+                           form=form,
+                           comments=comments)
 
 
 @app.route("/create_trad", methods=["GET", "POST"])

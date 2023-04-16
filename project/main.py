@@ -72,6 +72,11 @@ def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
+@app.errorhandler(401)
+def unauthorized(error):
+    return make_response(f'зарегистрируйтесь, что бы просмотреть', 401)
+
+
 @app.route("/registration", methods=["GET", "POST"])  # обработчик для регистрации пользователя
 def registration():
     form = RegistrationForm()

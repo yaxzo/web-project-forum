@@ -1,6 +1,6 @@
 import os
-
-from flask import Flask, render_template, redirect, request
+# pip i
+from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from data import db_session
@@ -14,6 +14,9 @@ from forms.trad_form import CreateTradForm
 from forms.change_info_form import ChangeInfoForm
 from forms.comment_form import CommentForm
 
+from api.v1 import user_api
+from api.v1 import trad_api
+
 from werkzeug.security import check_password_hash
 
 import uuid as uuid
@@ -26,13 +29,13 @@ import uuid as uuid
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "project_secret_key"
 app.config["UPLOAD_FOLDER"] = ["static/profile pictures", "static/trads pictures", "static/article pictures"]
+app.config["JSON_SORT_KEYS"] = False
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-db_session.global_init("db/forum.db")  # подключение к бд
 
 
 # сохранения пользователя в "сессии"
@@ -57,6 +60,16 @@ def allowed_file(filename):  # функция проверки расширен�
 '''
         ВИДИМАЯ НА САЙТЕ ЧАСТЬ
 '''
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
 @app.route("/registration", methods=["GET", "POST"])  # обработчик для регистрации пользователя
@@ -251,6 +264,7 @@ def change_info():
                     saver.save(os.path.join(app.config["UPLOAD_FOLDER"][0], pic_name))
                 else:
                     return render_template("change_info.html",
+                                           title="Изменение информации",
                                            form=form,
                                            message="Неккоректный файл")
 
@@ -258,8 +272,9 @@ def change_info():
             return redirect(f"/account/{current_user.id}")
         return render_template("change_info.html",
                                form=form,
+                               title="Изменение информации",
                                message="Введён некорректный пароль")
-    return render_template("change_info.html", form=form)
+    return render_template("change_info.html", title="Изменение информации", form=form)
 
 
 @app.route("/")  # обработчик домашней страницы
@@ -272,6 +287,9 @@ def home():
 
 
 def main():
+    db_session.global_init("db/forum.db")  # подключение к бд
+    app.register_blueprint(user_api.blueprint)  # регистрация блюпринта API пользователя
+    app.register_blueprint(trad_api.blueprint)
     app.run(host="127.0.0.1", port=5050)
 
 

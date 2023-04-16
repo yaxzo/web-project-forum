@@ -4,52 +4,56 @@
 <div class="h-100 d-flex justify-content-center align-items-center">
     <h2>Создание обсуждения</h2>
 </div>
-<div class="h-100 d-flex justify-content-center align-items-center">
-    <form action="" method="post" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.title.label }}<br>
-            {{ form.title(class="form-control") }}<br>
-            {% for error in form.title.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.preview.label }}<br>
-            {{ form.preview(class="form-control") }}<br>
-            {% for error in form.preview.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.content.label }}<br>
-            {{ form.content(class="form-control", type="textarea") }}<br>
-            {% for error in form.content.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.photo.label }}<br>
-            {{ form.photo(class="form-control", type="file") }}<br>
-            {% for error in form.photo.errors %}
-                <p class="alert alert-danger" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </p>
-        <p>{{ form.is_private(class="form-check-input", type="checkbox") }} {{ form.is_private.label }}</p>
-        <p>{{ form.submit(type="submit", class="btn btn-outline-primary") }}</p>
-        {% if message %}
-            <p class="alert alert-danger" role="alert">
-                {{message}}
+
+<div class="row">
+    <div class="col-7" style="margin-left: 30px;">
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.title.label }}<br>
+                {{ form.title(class="form-control") }}<br>
+                {% for error in form.title.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
             </p>
-        {% endif %}
-    </form>
+            <p>
+                {{ form.preview.label }}<br>
+                {{ form.preview(class="form-control") }}<br>
+                {% for error in form.preview.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.content.label }}<br>
+                {{ form.content(class="form-control", type="textarea") }}<br>
+                {% for error in form.content.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.photo.label }}<br>
+                {{ form.photo(class="form-control", type="file") }}<br>
+                {% for error in form.photo.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </p>
+            <p>{{ form.is_private(class="form-check-input", type="checkbox") }} {{ form.is_private.label }}</p>
+            <p>{{ form.submit(type="submit", class="btn btn-outline-primary") }}</p>
+            {% if message %}
+                <p class="alert alert-danger" role="alert">
+                    {{message}}
+                </p>
+            {% endif %}
+        </form>
+    </div>
+    <div class="col"></div>
 </div>
 {% endblock %}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
           integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <title>{{ title }}</title>
 </head>
+
 <body>
     {% block header %}
         <div class="container" style="height: 50px">
@@ -129,8 +130,39 @@
     {% endblock %}
 
     {% block footer %}
-        <footer>
-            <!-- Только начну верстать футер для главной страницы -->
+        <footer style="margin-top: 300px; margin-bottom: 30px;">
+            <div class="container align-items-center">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col-4 justify-content-end">
+                            <h5>ProgerForum</h5><br>
+                            <strong>Спасибо за интерес к проекту!</strong>
+                        </div>
+                        <div class="col-2">
+                            <ul class="nav justify-content-end">
+                                <li>
+                                    <strong>Соц. сети проекта</strong><br>
+                                    <a class="nav-link active" aria-current="page" href="https://github.com/yaxzo/web-project-forum" target="_blank">
+                                        GitHub
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-2">
+                            <ul class="nav">
+                                <li>
+                                    <strong>Для разработчиков</strong><br>
+                                    <a class="nav-link active" aria-current="page" href="https://github.com/yaxzo/web-project-forum/blob/main/forum-api-docs.md" target="_blank">
+                                        API
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </footer>
     {% endblock %}
 </body>

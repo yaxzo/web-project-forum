@@ -31,7 +31,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                                         nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.date.today())
-    trads = orm.relationship("Trad", back_populates="user")
+
+    trads = orm.relationship("Trad", back_populates="user", lazy=True)
+    comments = orm.relationship("TradComment", back_populates="user", lazy=True)
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

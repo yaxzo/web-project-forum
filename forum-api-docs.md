@@ -2,8 +2,9 @@
 
 ```PUBLIC_APIKEY: GJYE-HY34-NBSD-LN4C```
 
-все места, где указан <string:apikey> заменить на публичный API-ключ
-для приватных ключей указано <string:private_apikey>
+все места, где указано `<string:apikey>` заменить на публичный API-ключ
+
+для приватных ключей указано `<string:private_apikey>`
 
 
 ## API для класса User
@@ -15,7 +16,7 @@
 **Requset:**
 
 ```
-http://127.0.0.1:5050/api/v1/<string:apikey>/users
+http://127.0.0.1:5050/api/v1/users/<string:apikey>
 ```
 
 **Example response:**

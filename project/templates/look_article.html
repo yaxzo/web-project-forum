@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-2 align-items-center">
+                <img src="../static/profile pictures/{{ article.user.profile_photo }}" class="rounded-circle" alt="..." style="width: 125px; height: 125px;"><br><br>
+                <strong>Автор: </strong> {{ article.user.username }}<br>
+            </div>
+            <div class="col-9 align-items-center">
+                <h1>{{ article.title }}</h1>
+                <div class="col-9 fw-medium" style="margin-top: 30px;">
+                    {{ article.content }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 50px;">
+        <form action="" method="post">
+            <div class="hstack gap-3">
+                {{ form.hidden_tag() }}
+                <img src="../static/profile pictures/{{ current_user.profile_photo }}" class="rounded-circle" alt="..." style="width: 75px; height: 75px;">
+                {{ form.comment_text(class="form-control", type="textarea", placeholder="Ваш комментарий") }}
+                {{ form.submit(type="submit", class="btn btn-secondary") }}
+            </div>
+        </form>
+    </div>
+
+    <div class="container" style="margin-top: 30px;">
+        <div>
+            <h4>Комментарии</h4>
+            {% for comment in comments %}
+                <div class="row" style="margin-top: 35px;">
+                    <div class="col-2">
+                        <img src="../static/profile pictures/{{ comment.user.profile_photo }}" class="rounded-circle" alt="..." style="width: 75px; height: 75px;">
+                        <strong class="align-top">{{ comment.user.username }}</strong>
+                    </div>
+                    <div class="col-7 fw-medium" style="margin-top: 30px">
+                        <p>{{ comment.content }}</p>
+                    </div>
+                </div><hr>
+            {% else %}
+                <strong>Опубликуйте комментарий первым!</strong>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

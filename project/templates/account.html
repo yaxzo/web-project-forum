@@ -12,7 +12,7 @@
             <div class="col">
             </div>
             <div class="col justify-content-end">
-                <a type="button" class="btn btn-outline-primary" href="/crate_article" style="margin-right: 15px;">Создать статью</a>
+                <a type="button" class="btn btn-outline-primary" href="/create_article" style="margin-right: 15px;">Создать статью</a>
                 <a type="button" class="btn btn-outline-primary" href="/create_trad">Создать обсуждение</a>
             </div>
         </div>
@@ -29,13 +29,34 @@
                             <h5 class="card-title">{{ item.title }}</h5>
                             <p class="card-text">{{ item.preview }}</p>
                             <p><a class="card-text" href="/user/{{ item.user.id }}">{{ item.user.username }}</a></p>
-                            <a href="/trad/{{ item.id }}" class="btn btn-primary">Перейти к треду</a>
+                            <a href="/trad/{{ item.id }}" class="btn btn-primary">Перейти к обсуждению</a>
                         </div>
                     </div>
                 </div>
             {% else %}
                 <strong>Здесь пока ничего нет</strong>
             {% endfor %}
+        </div><br>
+
+        <div class="container">
+            <h1 class="align-items-center"> Ваши статьи </h1>
+            <div class="row">
+                {% for item in articles %}
+                    <div class="col" style="margin-bottom: 20px;">
+                        <div class="card" style="width: 15rem;">
+                            <img src="../static/trads pictures/{{ item.trad_photo }}" class="card-img-top" alt="..." style="width: 15rem; height: 15rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text">{{ item.preview }}</p>
+                                <p><a class="card-text" href="/user/{{ item.user.id }}">{{ item.user.username }}</a></p>
+                                <a href="/article/{{ item.id }}" class="btn btn-primary">Перейти к статье</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <strong>Здесь пока ничего нет</strong>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

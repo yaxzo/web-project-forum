@@ -1,0 +1,11 @@
+flask==2.2.3
+flask-wtf==1.1.1
+flask-login==0.6.2
+flask-sqlalchemy==3.0.3
+SQLAlchemy==2.0.8
+WTForms==3.0.1
+Werkzeug==2.2.3
+requests==2.28.2
+SQLAlchemy-serializer==1.4.1
+flask_uploads==0.2.1
+flask-restful==0.3.9

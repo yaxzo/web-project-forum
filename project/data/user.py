@@ -33,6 +33,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                                      default=datetime.date.today())
 
     trads = orm.relationship("Trad", back_populates="user", lazy=True)
+    article = orm.relationship("Article", back_populates="user", lazy=True)
     comments = orm.relationship("TradComment", back_populates="user", lazy=True)
 
     def set_password(self, password):
